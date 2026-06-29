@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Egypt vs Australia — Prediction Pool</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    min-height: 100vh;
+    background: radial-gradient(1200px 600px at 50% -10%, #173b2c 0%, #0c1f1a 45%, #08120f 100%);
+    color: #EDE7D9;
+    font-family: 'DM Sans', sans-serif;
+    padding: 0 0 64px;
+  }
+  .display { font-family: 'Bebas Neue', 'Arial Narrow', sans-serif; letter-spacing: 0.04em; }
+  .wrap { max-width: 720px; margin: 0 auto; padding: 40px 20px 0; }
+  .eyebrow { text-align: center; font-size: 12px; letter-spacing: 0.18em; color: rgba(237,231,217,0.55); margin-bottom: 18px; }
+  .vs-row { display: flex; align-items: center; justify-content: center; gap: 18px; margin-bottom: 8px; }
+  .team-col { text-align: center; }
+  .jersey {
+    width: 72px; height: 72px; border-radius: 16px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 30px; flex-shrink: 0; margin: 0 auto;
+  }
+  .jersey.egy { background: linear-gradient(160deg, #CE1126 0%, #CE1126cc 60%, #C09A3E 130%); box-shadow: 0 8px 24px -8px #CE112699, inset 0 1px 0 rgba(255,255,255,0.25); border: 1px solid #C09A3E55; }
+  .jersey.aus { background: linear-gradient(160deg, #1B5E3F 0%, #1B5E3Fcc 60%, #FFC72C 130%); box-shadow: 0 8px 24px -8px #1B5E3F99, inset 0 1px 0 rgba(255,255,255,0.25); border: 1px solid #FFC72C55; }
+  .team-name { font-size: 26px; margin-top: 8px; }
+  .vs-label { font-size: 34px; color: rgba(237,231,217,0.4); }
+  .meta { display: flex; justify-content: center; gap: 16px; font-size: 13px; color: rgba(237,231,217,0.6); margin-bottom: 28px; }
+  .meta span { display: flex; align-items: center; gap: 6px; }
+  .players-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 28px; }
+  .players-card { background: rgba(255,255,255,0.04); border-radius: 14px; padding: 14px 16px; }
+  .players-card.egy { border: 1px solid #CE112640; }
+  .players-card.aus { border: 1px solid #1B5E3F40; }
+  .players-title { font-size: 13px; margin-bottom: 8px; letter-spacing: 0.08em; }
+  .players-card.egy .players-title { color: #C09A3E; }
+  .players-card.aus .players-title { color: #FFC72C; }
+  .player-line { font-size: 13.5px; color: rgba(237,231,217,0.85); padding: 3px 0; }
+  .pot-card {
+    background: linear-gradient(135deg, rgba(255,199,44,0.12), rgba(255,199,44,0.03));
+    border: 1px solid rgba(255,199,44,0.35);
+    border-radius: 18px; padding: 20px 24px;
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 28px;
+  }
+  .pot-label { font-size: 12px; color: rgba(237,231,217,0.55); margin-bottom: 4px; }
+  .pot-value { font-size: 38px; color: #FFC72C; }
+  .entries-value { font-size: 26px; }
+  .card {
+    background: rgba(255,255,255,0.045);
+    border: 1px solid rgba(237,231,217,0.12);
+    border-radius: 18px; padding: 24px; margin-bottom: 28px;
+  }
+  .card h2 { font-size: 18px; margin-bottom: 14px; }
+  input[type="text"], input[type="number"] {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(237,231,217,0.18);
+    color: #EDE7D9;
+    border-radius: 10px;
+    padding: 12px 14px;
+    font-size: 16px;
+    width: 100%;
+    outline: none;
+    font-family: 'DM Sans', sans-serif;
+    transition: border-color 0.15s, background 0.15s;
+  }
+  input:focus { border-color: #FFC72C; background: rgba(255,255,255,0.09); }
+  input::placeholder { color: rgba(237,231,217,0.35); }
+  .score-row { display: grid; grid-template-columns: 1fr auto 1fr; gap: 10px; align-items: center; margin: 14px 0; }
+  .score-label { font-size: 11px; color: rgba(237,231,217,0.5); margin-bottom: 6px; }
+  .score-sep { font-size: 20px; color: rgba(237,231,217,0.4); padding-top: 18px; text-align: center; }
+  .btn-primary {
+    background: linear-gradient(135deg, #FFC72C 0%, #E2A412 100%);
+    color: #1a1206; border: none; border-radius: 12px;
+    font-weight: 700; padding: 14px 20px; font-size: 16px;
+    cursor: pointer; width: 100%;
+    box-shadow: 0 8px 20px -6px rgba(255,199,44,0.5);
+    font-family: 'DM Sans', sans-serif;
+  }
+  .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+  .btn-ghost {
+    background: transparent; border: 1px solid rgba(237,231,217,0.25);
+    color: #EDE7D9; border-radius: 10px; padding: 8px 14px;
+    font-size: 13px; cursor: pointer; font-family: 'DM Sans', sans-serif;
+  }
+  .error-text { color: #ff9b9b; font-size: 13px; margin: 8px 0; }
+  .list-head { font-size: 16px; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+  .entry-row {
+    display: flex; align-items: center; justify-content: space-between;
+    background: rgba(255,255,255,0.035);
+    border: 1px solid rgba(237,231,217,0.08);
+    border-radius: 10px; padding: 10px 14px; margin-bottom: 8px;
+  }
+  .entry-row.winner { background: rgba(255,199,44,0.1); border: 1px solid rgba(255,199,44,0.5); }
+  .entry-name { font-size: 14px; display: flex; align-items: center; gap: 8px; }
+  .entry-idx { color: rgba(237,231,217,0.4); font-size: 12px; }
+  .entry-score { font-size: 16px; }
+  .muted { color: rgba(237,231,217,0.5); font-size: 14px; }
+  .result-banner {
+    background: rgba(124,203,155,0.1); border: 1px solid rgba(124,203,155,0.4);
+    border-radius: 18px; padding: 22px; margin-bottom: 28px; text-align: center;
+  }
+  .footer-note { text-align: center; font-size: 11.5px; color: rgba(237,231,217,0.35); margin-top: 40px; }
+  .admin-toggle { text-align: center; margin-top: 36px; }
+  .admin-panel {
+    margin-top: 14px; background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(237,231,217,0.12); border-radius: 14px; padding: 18px;
+  }
+  .admin-row { display: flex; gap: 10px; align-items: center; margin-bottom: 10px; }
+  .admin-actions { display: flex; gap: 10px; }
+  .hidden { display: none; }
+  .icon { width: 14px; height: 14px; vertical-align: -2px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="eyebrow">TEAM PREDICTION POOL · EGP 100 PER PERSON · WINNERS SPLIT THE POT</div>
+
+  <div class="vs-row">
+    <div class="team-col">
+      <div class="jersey egy">🇪🇬</div>
+      <div class="team-name display">Egypt</div>
+    </div>
+    <div class="vs-label display">VS</div>
+    <div class="team-col">
+      <div class="jersey aus">🇦🇺</div>
+      <div class="team-name display">Australia</div>
+    </div>
+  </div>
+
+  <div class="meta">
+    <span>🕐 Sat, 4 July 2026 · 21:00 KST</span>
+  </div>
+
+  <div class="players-grid">
+    <div class="players-card egy">
+      <div class="players-title display">🇪🇬 Egypt key players</div>
+      <div class="player-line">⚽ Mohamed Salah (C)</div>
+      <div class="player-line">⚽ Omar Marmoush</div>
+      <div class="player-line">⚽ Mahmoud Trezeguet</div>
+    </div>
+    <div class="players-card aus">
+      <div class="players-title display">🇦🇺 Australia key players</div>
+      <div class="player-line">⚽ Mathew Ryan</div>
+      <div class="player-line">⚽ Mathew Leckie</div>
+      <div class="player-line">⚽ Adam Taggart</div>
+    </div>
+  </div>
+
+  <div class="pot-card">
+    <div>
+      <div class="pot-label">💰 Current prize pool</div>
+      <div class="pot-value display" id="potValue">EGP 0</div>
+    </div>
+    <div style="text-align:right">
+      <div class="pot-label">👥 Entries</div>
+      <div class="entries-value display" id="entriesValue">0 / 30</div>
+    </div>
+  </div>
+
+  <div class="card" id="submitCard">
+    <div id="submitForm">
+      <h2 class="display">Submit your prediction</h2>
+      <input type="text" id="nameInput" placeholder="Name" />
+      <div class="score-row">
+        <div>
+          <div class="score-label">🇪🇬 Egypt</div>
+          <input type="number" id="homeInput" min="0" placeholder="0" style="text-align:center" />
+        </div>
+        <div class="score-sep display">:</div>
+        <div>
+          <div class="score-label" style="text-align:right">Australia 🇦🇺</div>
+          <input type="number" id="awayInput" min="0" placeholder="0" style="text-align:center" />
+        </div>
+      </div>
+      <div class="error-text hidden" id="errorText"></div>
+      <button class="btn-primary" id="submitBtn">Submit prediction (EGP 100 stake)</button>
+    </div>
+    <div id="submittedView" class="hidden" style="text-align:center; padding:12px 0">
+      <div style="font-size:32px; color:#7CCB9B; margin-bottom:8px">✓</div>
+      <div class="display" style="font-size:20px; margin-bottom:4px">Submitted</div>
+      <div class="muted" id="submittedText"></div>
+      <button class="btn-ghost" id="enterAnotherBtn" style="margin-top:16px">Enter another person's prediction</button>
+    </div>
+  </div>
+
+  <div class="result-banner hidden" id="resultBanner">
+    <div style="font-size:26px; color:#FFC72C; margin-bottom:6px">🏆</div>
+    <div class="display" style="font-size:22px; margin-bottom:4px" id="resultScoreText"></div>
+    <div class="muted" id="resultDetailText"></div>
+  </div>
+
+  <div class="list-head display">
+    <span id="listCount">Predictions submitted (0)</span>
+    <button class="btn-ghost" id="refreshBtn" style="margin-left:auto; font-size:12px; padding:4px 10px">↻ Refresh</button>
+  </div>
+  <div id="entriesList"><div class="muted">Loading...</div></div>
+
+  <div class="admin-toggle">
+    <button class="btn-ghost" id="adminToggleBtn">🔒 Organizer: enter match result</button>
+  </div>
+  <div class="admin-panel hidden" id="adminPanel">
+    <div class="muted" style="font-size:12px; margin-bottom:10px">🛡 Enter the real final score to automatically calculate the winners.</div>
+    <div class="admin-row">
+      <input type="number" id="resultHomeInput" placeholder="Egypt" style="text-align:center" />
+      <span>:</span>
+      <input type="number" id="resultAwayInput" placeholder="Australia" style="text-align:center" />
+    </div>
+    <div class="admin-actions">
+      <button class="btn-primary" id="saveResultBtn" style="flex:1">Confirm result &amp; settle</button>
+      <button class="btn-ghost hidden" id="resetResultBtn">Reset</button>
+    </div>
+  </div>
+
+  <div class="footer-note">Everyone on this link sees the same shared list. Each name can only submit once.</div>
+</div>
+
+<script>
+/*
+  Shared storage: uses jsonblob.com, a free, no-signup public JSON store.
+  Each "blob" is just a JSON document at a public URL anyone can GET/PUT.
+  This keeps the page a single static HTML file (drag-and-drop hostable)
+  while still letting all 30 people see the same shared list in real time.
+*/
+const BLOB_BASE = "https://jsonblob.com";
+// Pre-created shared blobs for this match.
+const ENTRIES_BLOB_ID = "019f1308-aa51-7a65-b28c-ed0ae261e732";
+const RESULT_BLOB_ID = "019f1309-c954-72ec-9bed-7891bf293c6b";
+
+const STAKE = 100;
+let entries = [];
+let result = null;
+let myName = "";
+let justSubmitted = false;
+
+function outcome(h, a) { return h > a ? "home" : h < a ? "away" : "draw"; }
+
+function computeWinners() {
+  if (!result) return null;
+  const exact = entries.filter(e => Number(e.home) === result.home && Number(e.away) === result.away);
+  if (exact.length > 0) return { tier: "Exact score", list: exact };
+  const dir = entries.filter(e => outcome(Number(e.home), Number(e.away)) === outcome(result.home, result.away));
+  if (dir.length > 0) return { tier: "Correct outcome (W/D/L)", list: dir };
+  return { tier: "None", list: [] };
+}
+
+async function blobGet(id) {
+  const r = await fetch(`${BLOB_BASE}/${id}/json`, { headers: { "Accept": "application/json" } });
+  if (!r.ok) throw new Error("blob get failed");
+  return r.json();
+}
+async function blobPut(id, data) {
+  const r = await fetch(`${BLOB_BASE}/${id}/json`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+  });
+  if (!r.ok) throw new Error("blob put failed");
+}
+
+async function load() {
+  try {
+    const data = await blobGet(ENTRIES_BLOB_ID);
+    entries = Array.isArray(data.entries) ? data.entries : [];
+  } catch { /* keep last known entries on transient failure */ }
+  try {
+    const data = await blobGet(RESULT_BLOB_ID);
+    result = data && data.home !== undefined ? data : null;
+  } catch { /* keep last known result */ }
+  render();
+}
+
+function render() {
+  const pot = entries.length * STAKE;
+  document.getElementById("potValue").textContent = `EGP ${pot.toLocaleString()}`;
+  document.getElementById("entriesValue").textContent = `${entries.length} / 30`;
+  document.getElementById("listCount").textContent = `Predictions submitted (${entries.length})`;
+
+  const winners = computeWinners();
+  const banner = document.getElementById("resultBanner");
+  if (result) {
+    banner.classList.remove("hidden");
+    document.getElementById("submitCard").classList.add("hidden");
+    document.getElementById("resultScoreText").textContent =
+      `Final score: Egypt ${result.home} : ${result.away} Australia`;
+    const detail = document.getElementById("resultDetailText");
+    if (winners.list.length > 0) {
+      const share = Math.floor((pot / winners.list.length) * 100) / 100;
+      detail.innerHTML = `${winners.tier} · ${winners.list.length} winner${winners.list.length > 1 ? "s" : ""} · <b style="color:#FFC72C">EGP ${share.toLocaleString()}</b> each`;
+    } else {
+      detail.textContent = "No winners this time. Check with the organizer on how to split the pot.";
+    }
+  } else {
+    banner.classList.add("hidden");
+    document.getElementById("submitCard").classList.remove("hidden");
+  }
+
+  const listEl = document.getElementById("entriesList");
+  if (entries.length === 0) {
+    listEl.innerHTML = '<div class="muted">No predictions yet. Be the first to submit one.</div>';
+  } else {
+    const sorted = entries.slice().sort((a, b) => a.ts - b.ts);
+    listEl.innerHTML = sorted.map((e, i) => {
+      const isWinner = result && winners.list.includes(e);
+      return `<div class="entry-row ${isWinner ? "winner" : ""}">
+        <span class="entry-name"><span class="entry-idx">${i + 1}.</span> ${escapeHtml(e.name)} ${isWinner ? "🏆" : ""}</span>
+        <span class="entry-score display">${e.home} : ${e.away}</span>
+      </div>`;
+    }).join("");
+  }
+}
+
+function escapeHtml(str) {
+  const div = document.createElement("div");
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+function showError(msg) {
+  const el = document.getElementById("errorText");
+  el.textContent = msg;
+  el.classList.remove("hidden");
+}
+function clearError() {
+  document.getElementById("errorText").classList.add("hidden");
+}
+
+document.getElementById("submitBtn").addEventListener("click", async () => {
+  clearError();
+  const name = document.getElementById("nameInput").value.trim();
+  const h = Number(document.getElementById("homeInput").value);
+  const a = Number(document.getElementById("awayInput").value);
+  const homeRaw = document.getElementById("homeInput").value;
+  const awayRaw = document.getElementById("awayInput").value;
+
+  if (!name) return showError("Please enter your name.");
+  if (homeRaw === "" || awayRaw === "" || Number.isNaN(h) || Number.isNaN(a) || h < 0 || a < 0) {
+    return showError("Please enter a valid score (e.g. 2 - 1).");
+  }
+
+  const btn = document.getElementById("submitBtn");
+  btn.disabled = true;
+  btn.textContent = "Submitting...";
+  try {
+    const fresh = await blobGet(ENTRIES_BLOB_ID).catch(() => ({ entries: [] }));
+    const list = Array.isArray(fresh.entries) ? fresh.entries : [];
+    if (list.some(e => e.name.trim() === name)) {
+      showError("You've already submitted a prediction under this name.");
+      btn.disabled = false;
+      btn.textContent = "Submit prediction (EGP 100 stake)";
+      return;
+    }
+    const next = [...list, { name, home: h, away: a, ts: Date.now() }];
+    await blobPut(ENTRIES_BLOB_ID, { entries: next });
+    entries = next;
+    myName = name;
+    justSubmitted = true;
+    document.getElementById("submitForm").classList.add("hidden");
+    document.getElementById("submittedView").classList.remove("hidden");
+    document.getElementById("submittedText").textContent =
+      `${name}'s prediction: Egypt ${h} : ${a} Australia`;
+    document.getElementById("homeInput").value = "";
+    document.getElementById("awayInput").value = "";
+    render();
+  } catch {
+    showError("Something went wrong while submitting. Please try again.");
+  }
+  btn.disabled = false;
+  btn.textContent = "Submit prediction (EGP 100 stake)";
+});
+
+document.getElementById("enterAnotherBtn").addEventListener("click", () => {
+  document.getElementById("nameInput").value = "";
+  document.getElementById("submitForm").classList.remove("hidden");
+  document.getElementById("submittedView").classList.add("hidden");
+});
+
+document.getElementById("refreshBtn").addEventListener("click", load);
+
+document.getElementById("adminToggleBtn").addEventListener("click", () => {
+  document.getElementById("adminPanel").classList.toggle("hidden");
+});
+
+document.getElementById("saveResultBtn").addEventListener("click", async () => {
+  const h = Number(document.getElementById("resultHomeInput").value);
+  const a = Number(document.getElementById("resultAwayInput").value);
+  const hr = document.getElementById("resultHomeInput").value;
+  const ar = document.getElementById("resultAwayInput").value;
+  if (hr === "" || ar === "" || Number.isNaN(h) || Number.isNaN(a)) return;
+  await blobPut(RESULT_BLOB_ID, { home: h, away: a });
+  result = { home: h, away: a };
+  document.getElementById("resetResultBtn").classList.remove("hidden");
+  render();
+});
+
+document.getElementById("resetResultBtn").addEventListener("click", async () => {
+  await blobPut(RESULT_BLOB_ID, {});
+  result = null;
+  document.getElementById("resetResultBtn").classList.add("hidden");
+  render();
+});
+
+load();
+setInterval(load, 5000);
+</script>
+</body>
+</html>
